@@ -138,6 +138,8 @@ public class Dispatcher extends Stopable {
 		Logger.log("onSubscribe:" + msg.toString());
 
 		storage.addSubscriber(topic, user);
+		
+	    Logger.log("User " + user + " subscribed to topic " + topic);
 
 		// subscribe user to the topic
 		// user and topic is contained in the subscribe message
@@ -158,15 +160,25 @@ public class Dispatcher extends Stopable {
 	}
 
 	public void onPublish(PublishMsg msg) {
-		String topic = msg.getTopic();
-		// String message = msg.getMessage();
-		Set<String> subscribers = storage.getSubscribers(topic);
-		Logger.log("onPublish:" + msg.toString());
-		if (subscribers != null) {
-			for (String client : subscribers) {
-				
-			}
-		}
+	    String topic = msg.getTopic();
+	    String message = msg.getMessage();
+	    
+	    Set<String> subscribers = storage.getSubscribers(topic);
+	    
+	    Logger.log("onPublish: " + msg.toString());
+	    
+	    if (subscribers.size() > 0) {
+	        for (String client : subscribers) {
+	            ClientSession session = storage.getSession(client);
+	            
+	            if (session != null) {
+	                PublishMsg publishMsg = new PublishMsg(client, topic, message);
+	                session.send(publishMsg);
+	            } 
+	        }
+	    } else {
+	        Logger.log("No subscribers found for topic: " + topic);
+	    }
 		// TO publish the message to clients subscribed to the topic
 		// topic and message is contained in the subscribe message
 		// messages must be sent using the corresponding client session objects

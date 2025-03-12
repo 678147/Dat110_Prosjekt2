@@ -75,12 +75,13 @@ public class Storage {
 		// delete topic from the storage
 	}
 
-	public void addSubscriber(String user, String topic) {
-		if(subscriptions.containsKey(topic) && !subscriptions.get(topic).contains(user)) {
-			subscriptions.get(topic).add(user);
-		}
-		//add the user as subscriber to the topic
-	
+	public void addSubscriber(String topic, String user) {
+	    Set<String> subscribers = subscriptions.get(topic);
+	    if (subscribers == null) {
+	        subscribers = ConcurrentHashMap.newKeySet();
+	        subscriptions.put(topic, subscribers);
+	    }
+	    subscribers.add(user);
 	}
 
 	public void removeSubscriber(String user, String topic) {
