@@ -137,7 +137,7 @@ public class Dispatcher extends Stopable {
 
 		Logger.log("onSubscribe:" + msg.toString());
 
-		storage.addSubscriber(topic, user);
+		storage.addSubscriber(user, topic);
 		
 	    Logger.log("User " + user + " subscribed to topic " + topic);
 
@@ -152,7 +152,7 @@ public class Dispatcher extends Stopable {
 
 		Logger.log("onUnsubscribe:" + msg.toString());
 
-		storage.removeSubscriber(topic, user);
+		storage.removeSubscriber(user, topic);
 
 		// unsubscribe user to the topic
 		// user and topic is contained in the unsubscribe message

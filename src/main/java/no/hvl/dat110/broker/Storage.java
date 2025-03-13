@@ -75,7 +75,7 @@ public class Storage {
 		// delete topic from the storage
 	}
 
-	public void addSubscriber(String topic, String user) {
+	public void addSubscriber(String user, String topic) {
 	    Set<String> subscribers = subscriptions.get(topic);
 	    if (subscribers == null) {
 	        subscribers = ConcurrentHashMap.newKeySet();
